@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Lista de Ativos - ConnectIT{% endblock %}
+
+{% block content %}
+    <style>
+        /* Estilos específicos para esta página podem ficar aqui ou num arquivo CSS externo */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .actions a { margin-left: 10px; padding: 8px 12px; background-color: #3498db; color: white; text-decoration: none; border-radius: 4px; }
+        .actions a:hover { background-color: #2980b9; }
+        table { border-collapse: collapse; width: 100%; background-color: white; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .pagination { margin-top: 20px; }
+        .filter-form { margin-bottom: 20px; }
+        .filter-form input, .filter-form select, .filter-form button { padding: 8px; margin-right: 10px; border-radius: 4px; border: 1px solid #ccc; }
+    </style>
+
+    <div class="header">
+        <h1>Ativos</h1>
+        <div class="actions">
+            <a href="{% url 'core:asset_add' %}">Adicionar Novo Ativo</a>
+            <a href="#">Importar Ativos</a>
+        </div>
+    </div>
+
+    <div class="filter-form">
+        <form method="get" action="{% url 'core:asset_list' %}">
+            <input type="text" name="search" placeholder="Pesquisar..." value="{{ search_query }}">
+            
+            <select name="unit">
+                <option value="">Todas as Unidades</option>
+                {% for unit in all_units %}
+                    <option value="{{ unit.id }}" {% if current_unit == unit.id|stringformat:"s" %}selected{% endif %}>
+                        {{ unit.name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <select name="status">
+                <option value="">Todos os Status</option>
+                {% for value, display in status_choices %}
+                    <option value="{{ value }}" {% if current_status == value %}selected{% endif %}>
+                        {{ display }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Filtrar</button>
+        </form>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Etiqueta Interna</th>
+                <th>Tipo</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Status</th>
+                <th>Unidade</th>
+                <th>Setor</th>
+                <th>Usuário</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for asset in assets %}
+            <tr>
+                <td>{{ asset.internal_tag|default:"N/A" }}</td>
+                <td>{{ asset.asset_type.name }}</td>
+                <td>{{ asset.brand }}</td>
+                <td>{{ asset.model }}</td>
+                <td>{{ asset.get_status_display }}</td>
+                <td>{{ asset.assigned_unit.name }}</td>
+                <td>{{ asset.assigned_sector.name }}</td>
+                <td>{{ asset.user|default:"-" }}</td>
+                <td>
+                    <a href="{% url 'core:asset_edit' asset.pk %}">Editar</a> |
+                    <a href="{% url 'core:asset_delete' asset.pk %}">Excluir</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9" style="text-align: center; padding: 20px;">Nenhum ativo encontrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1&amp;unit={{ current_unit }}&amp;status={{ current_status }}&amp;search={{ search_query }}">&laquo; primeira</a>
+            <a href="?page={{ page_obj.previous_page_number }}&amp;unit={{ current_unit }}&amp;status={{ current_status }}&amp;search={{ search_query }}">anterior</a>
+        {% endif %}
+
+        <span>
+            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&amp;unit={{ current_unit }}&amp;status={{ current_status }}&amp;search={{ search_query }}">próxima</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}&amp;unit={{ current_unit }}&amp;status={{ current_status }}&amp;search={{ search_query }}">última &raquo;</a>
+        {% endif %}
+    </div>
+{% endblock %}

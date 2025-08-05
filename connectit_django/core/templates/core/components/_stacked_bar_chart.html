@@ -1,0 +1,9 @@
+{# core/templates/core/components/_stacked_bar_chart.html #}
+<div class="dashboard-panel panel-half">
+    <h3>{{ title }}</h3>
+    <div class="chart-wrapper">
+        <canvas id="{{ chart_id }}"></canvas>
+    </div>
+    {# Passa os dados do Django para o JavaScript de forma segura #}
+    {{ chart_data|json_script:chart_id|safe }}
+</div>

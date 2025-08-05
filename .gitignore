@@ -1,0 +1,46 @@
+# Arquivos de Cache e Bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ambientes Virtuais
+venv/
+.venv/
+env/
+.env/
+ENV/
+
+# Banco de Dados
+*.sqlite3
+db.sqlite3
+db.sqlite3-journal
+
+# Arquivos de Dependências (locks)
+Pipfile.lock
+poetry.lock
+
+# Arquivos de Configuração de IDEs
+.idea/
+.vscode/
+*.swp
+
+# Arquivos de Sistema Operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de Mídia e Estáticos (gerados pelo usuário)
+/media/
+
+# Arquivos de ambiente e segredos
+.env
+*.env
+
+# Logs
+logs/
+*.log
+
+# Arquivos de Teste
+.coverage
+.pytest_cache/
+htmlcov/

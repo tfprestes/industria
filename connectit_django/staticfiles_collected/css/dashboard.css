@@ -1,0 +1,209 @@
+/* ============================================================================== */
+/* core/static/css/dashboard.css - Estilos para o Dashboard ConnectIT           */
+/* ============================================================================== */
+
+/* Importação de fontes (se necessário, ou defina no base.html) */
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap'); */
+
+:root {
+    /* Cores do Tema Escuro */
+    --dark-bg: #1e1e2d; /* Fundo principal */
+    --card-bg: #27293d; /* Fundo dos cards */
+    --text-color: #a4a4a4; /* Cor do texto padrão */
+    --heading-color: #e0e0e0; /* Cor dos títulos */
+    --primary-color: #007bff; /* Azul padrão */
+    --success-color: #28a745; /* Verde */
+    --warning-color: #ffc107; /* Amarelo */
+    --danger-color: #dc3545; /* Vermelho */
+    --info-color: #17a2b8; /* Azul claro */
+    --border-color: rgba(255, 255, 255, 0.1); /* Cor da borda suave */
+    --shadow-color: rgba(0, 0, 0, 0.2); /* Cor da sombra */
+}
+
+/* Estilos Globais do Dashboard */
+body {
+    background-color: var(--dark-bg);
+    color: var(--text-color);
+    font-family: 'Roboto', sans-serif; /* Use sua fonte preferida */
+}
+
+.dashboard-title {
+    color: var(--heading-color);
+    margin-bottom: 25px;
+    font-size: 1.8em;
+    font-weight: 700;
+}
+
+/* ====================================================================== */
+/* LAYOUT GRID (Similar ao Bootstrap Grid, mas customizado)               */
+/* ====================================================================== */
+.metrics-grid, .charts-row {
+    display: grid;
+    gap: 20px; /* Espaço entre os itens do grid */
+    margin-bottom: 20px;
+}
+
+/* Grid para os cards de métricas (6 colunas no desktop, flexível em mobile) */
+.metrics-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* 6 cards */
+}
+
+/* Grid para as linhas de gráficos e painéis (2 colunas no desktop) */
+.charts-row {
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); /* 2 colunas para gráficos maiores */
+}
+
+/* ====================================================================== */
+/* ESTILOS DOS CARDS E PAINÉIS                                            */
+/* ====================================================================== */
+.metric-card, .dashboard-panel {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px var(--shadow-color);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s ease-in-out;
+    min-height: 120px; /* Altura mínima para cards */
+}
+
+.metric-card:hover, .dashboard-panel:hover {
+    transform: translateY(-5px); /* Efeito suave ao passar o mouse */
+}
+
+.metric-card .metric-icon {
+    font-size: 2.5em;
+    color: var(--primary-color); /* Cor dos ícones */
+    margin-right: 15px;
+}
+
+.metric-card .metric-icon i {
+    width: 40px; /* Garante tamanho fixo para o ícone */
+    text-align: center;
+}
+
+.metric-card .metric-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.metric-card .metric-title {
+    font-size: 0.9em;
+    color: var(--text-color);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.metric-card .metric-value {
+    font-size: 2em;
+    font-weight: bold;
+    color: var(--heading-color);
+    line-height: 1; /* Remove espaçamento extra */
+}
+
+.metric-card .metric-secondary-value {
+    font-size: 0.8em;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+.dashboard-panel h3 {
+    color: var(--heading-color);
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+.chart-wrapper {
+    position: relative;
+    height: 300px; /* Altura padrão para gráficos */
+    width: 100%; /* Garante que o gráfico ocupe o espaço */
+}
+
+/* ====================================================================== */
+/* ESTILOS DE LISTAS E TABELAS (para Alertas, Pagamentos, Software)       */
+/* ====================================================================== */
+.alert-list, .payment-list, .software-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.alert-item, .payment-list li, .software-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+}
+
+.alert-item:last-child, .payment-list li:last-child, .software-list li:last-child {
+    border-bottom: none;
+}
+
+.alert-item i {
+    margin-right: 10px;
+}
+
+.alert-item.alert-info { color: var(--info-color); }
+.alert-item.alert-warning { color: var(--warning-color); }
+.alert-item.alert-danger { color: var(--danger-color); }
+
+.payment-description { flex-grow: 1; color: var(--heading-color); }
+.payment-amount { font-weight: bold; color: var(--success-color); margin-left: 10px; }
+.payment-date { font-size: 0.8em; color: var(--text-color); margin-left: 5px; }
+
+.software-list li {
+    color: var(--heading-color);
+}
+
+.no-data {
+    color: var(--text-color);
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+}
+
+/* ====================================================================== */
+/* MEDIA QUERIES PARA RESPONSIVIDADE                                      */
+/* ====================================================================== */
+@media (max-width: 1200px) {
+    .charts-row {
+        grid-template-columns: 1fr; /* Uma coluna em telas menores */
+    }
+}
+
+@media (max-width: 768px) {
+    .metrics-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Mais cards por linha em telas médias */
+    }
+    .metric-card, .dashboard-panel {
+        padding: 15px;
+    }
+    .metric-card .metric-icon {
+        font-size: 2em;
+    }
+    .metric-card .metric-value {
+        font-size: 1.8em;
+    }
+    .dashboard-title {
+        font-size: 1.5em;
+    }
+}
+
+@media (max-width: 480px) {
+    .metrics-grid {
+        grid-template-columns: 1fr; /* Uma coluna por padrão em telas muito pequenas */
+    }
+    .metric-card .metric-icon {
+        margin-right: 10px;
+    }
+    .metric-card .metric-title {
+        font-size: 0.8em;
+    }
+    .metric-card .metric-value {
+        font-size: 1.5em;
+    }
+    .chart-wrapper {
+        height: 250px; /* Reduz altura de gráficos em telas muito pequenas */
+    }
+}

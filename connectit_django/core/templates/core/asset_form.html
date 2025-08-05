@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        form p { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; }
+        input, select, textarea { width: 300px; padding: 5px; }
+    </style>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Salvar</button>
+    </form>
+
+    <a href="{% url 'core:asset_list' %}" style="display: block; margin-top: 20px;">Voltar para a lista</a>
+</body>
+</html>

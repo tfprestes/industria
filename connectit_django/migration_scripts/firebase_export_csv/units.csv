@@ -1,0 +1,3 @@
+address,cnpj,id_firestore,name,type
+"{'city': 'Campinas', 'country': 'Brasil', 'neighborhood': 'Parque Industrial', 'number': '200', 'state': 'São Paulo', 'street': 'Av. Alexander Graham Bell - Unidade D1 - Techno Park'}",03645657000182,Q1vyli7xyukSsgSeGGHY,Alibra Ingredientes SA - SP,Matriz
+"{'city': 'Marechal Cândido Rondon', 'country': 'Brasil', 'neighborhood': 'Parque Industrial', 'number': '1', 'state': 'Paraná', 'street': 'BR 163, KM 277'}",03645657000285,vcUJkV1rt2Ia1JTvFP7v,Alibra Ingredientes SA - PR,Filial

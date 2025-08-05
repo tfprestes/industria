@@ -1,0 +1,10 @@
+# Dependências do projeto ConnectIT
+Flask
+firebase-admin
+python-dotenv
+pandas
+ReportLab
+pytz
+Werkzeug
+gunicorn # ou waitress para Windows
+requests

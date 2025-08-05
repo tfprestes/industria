@@ -1,0 +1,33 @@
+assignedSectorId,attachments,brand,firmwareVersion,id_firestore,ipAddress,locationDescription,model,networkCategory,ports,type
+JuJLxLca9a7SfUHp9Z6n,[],Huawei,,6HTutVj5ArIo87JUzAIN,10.1.1.28,SWITCH CAMERAS T1500,A,TI,"[{'poe_status': False, 'vlan': '3001', 'status': 'Ativa', 'description': '', 'speed': '1G', 'number': 1, 'connected_mac': ''}]",Switch
+HjkzLJTyXAOTRbKJOLFv,[],TP-Link,,8SnXJInq1IS6b8sAJrIm,10.1.1.34,SALA DE PAINEIS MSMU ENTRADA A ESQUERDA,A,TI,[],Switch
+ogIG1xXooObgj912at6t,[],Huawei,,AUA2HldCPuYyHRMSSkkg,10.1.1.43,SWITCH TI T100/600/1200 01,A,TI,[],Switch
+HjkzLJTyXAOTRbKJOLFv,[],Huawei,,Cb4mHYygk8cBuK52qh1j,10.1.1.46,SALA DE PAINEIS MSMU ENTRADA A ESQUERDA,A,TI,[],Switch
+XNikCZJkyMPCdMfVGv1t,[],Huawei,,E61QvHBN2iplDyTMrI23,10.1.1.52,SALA DE JOGOS,A,TI,[],Switch
+jY25W1eHGydiXTWGWF9S,[],Huawei,,En40n9sYklNyREmtR2je,10.1.1.49,RACK PCP,A,TI,[],Switch
+ogIG1xXooObgj912at6t,[],Huawei,,IArR6hbzDUd4er5EhY1A,10.1.1.32,SALA DE PAINEIS T100/T600/T1200,A,TI,[],Switch
+JwBtyHrAXS1TKxrJIv3b,[],Huawei,,Igd7KfTy75TFiARweqDP,10.1.1.40,R8-SWTI01,A,TI,[],Switch
+mTf5jggXwVzMMvN05DRj,[],Huawei,,JDxE65oHdVspMYrs9UM3,10.1.1.42,SW-TI-STACKSERV-01,A,TI,[],Switch
+eCwiMwQCRJKrvOCsQDVN,[],Huawei,,JRpztkudt3q3Z0ntgfTv,10.1.1.36,SALA DO FATURAMENTO,A,TI,[],Switch
+HjkzLJTyXAOTRbKJOLFv,[],TP-Link,,LqqqxEIvQldeiRkWAuJb,10.1.1.7,SALA DE PAINEIS MSMU ENTRADA A DIREITA,A,TI,[],Switch
+XNikCZJkyMPCdMfVGv1t,[],Huawei,,S685mDaApYVDVM9kNKVG,10.1.1.31,ENTRADA DA CAMARA FRIA APÓS SALA DE LIMPEZA PESSOAL,A,TI,[],Switch
+HjkzLJTyXAOTRbKJOLFv,[],Huawei,,S7fQ01GNJWbAqNIBH8Sr,10.1.1.33,"RACK MU SALA OPERADORES
+RACK MU SALA OPERADORES
+RACK MU SALA OPERADORES",A,TI,[],Switch
+ogIG1xXooObgj912at6t,[],Huawei,,U7fGseamWdVFsqtdORFm,10.1.1.44,SWITCH TI T100/600/1200 02,A,TI,[],Switch
+mTf5jggXwVzMMvN05DRj,[],Huawei,,UbqbZSR3bJ6qEuVu6Gbz,10.1.1.41,"SWITCH TI RACK TI STACK CORE 01
+SWITCH TI RACK TI STACK CORE 01
+SWITCH TI RACK TI STACK CORE 01
+",S5735,TI,[],Switch
+HjkzLJTyXAOTRbKJOLFv,[],Huawei,,Zslgcg73aLQe6XmPbPts,10.1.1.35,SALA DE ETIQUETAS MISTURA SECA,A,TI,[],Switch
+mTf5jggXwVzMMvN05DRj,[],Huawei,,a03zqbC3KL1NQBMJ7jMC,10.1.1.41,"SWITCH TI RACK TI STACK CORE 02SWITCH TI RACK TI STACK CORE 02
+SWITCH TI RACK TI STACK CORE 02",S5735,TI,[],Switch
+MkgEqYjmgdAF6QUWkRmX,[],Huawei,,cp5wY3t5eaeqK2qDLltw,10.1.1.47,SWITCH TI UTILIDADES,A,TI,[],Switch
+XNikCZJkyMPCdMfVGv1t,[],Huawei,,hTHd6kCVcRTgkNYgVWpo,10.1.1.38,SALA DO SESMT,A,TI,[],Switch
+MkgEqYjmgdAF6QUWkRmX,[],TP-Link,,iNGSabqks8MOpIPStDbB,10.1.1.37,SWITCH TI UTILIDADES,A,TI,[],Switch
+JwBtyHrAXS1TKxrJIv3b,[],Huawei,,m8TUkSmM0FMLXDkZbUBz,10.1.1.30,R8-SWTI02,A,TI,[],Switch
+HWuwiRi50QD9VJ0nNzZY,[],Huawei,,mTmvnCOtzS8YwxAxabGO,10.1.1.48,SWITCH TI ETE,A,TI,[],Switch
+eCwiMwQCRJKrvOCsQDVN,[],Huawei,,n3hUOe9zfbfrH3HrbekR,10.1.1.53,EXPEDIÇAO,A,TI,[],Switch
+ucnDmU9K4JKpFc3Os3Hd,[],Huawei,,ykp5ccwepd7H4PGqbRCJ,10.1.1.8,SALA DE COMPRAS,A,TI,[],Switch
+ogIG1xXooObgj912at6t,[],Huawei,,z5XfNwvJnre0NcP4eIOe,10.1.1.9,TORRES PESAGEM,A,TI,[],Switch
+mTf5jggXwVzMMvN05DRj,[],Huawei,,ztfcnVTIlqYJznESMj5W,10.1.1.42,SW-TI-STACKSERV-02,A,TI,[],Switch

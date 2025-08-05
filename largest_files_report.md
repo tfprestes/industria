@@ -1,0 +1,42 @@
+# Top 20 maiores arquivos do projeto
+
+---
+- **C:\industria\.venv\Lib\site-packages\pandas\core\generic.py** — 13979 linhas, 296 funções/classes
+---
+- **C:\industria\connectit_django\.venv\Lib\site-packages\pandas\core\generic.py** — 13979 linhas, 296 funções/classes
+---
+- **C:\industria\connectit_django\venv\Lib\site-packages\pandas\core\generic.py** — 13979 linhas, 296 funções/classes
+---
+- **C:\industria\.venv\Lib\site-packages\pandas\core\frame.py** — 12704 linhas, 321 funções/classes
+---
+- **C:\industria\connectit_django\.venv\Lib\site-packages\pandas\core\frame.py** — 12704 linhas, 321 funções/classes
+---
+- **C:\industria\connectit_django\venv\Lib\site-packages\pandas\core\frame.py** — 12704 linhas, 321 funções/classes
+---
+- **C:\industria\connectit_django\.venv\Lib\site-packages\django\contrib\admin\static\admin\js\vendor\jquery\jquery.js** — 10716 linhas, 116 funções/classes
+---
+- **C:\industria\connectit_django\staticfiles_collected\admin\js\vendor\jquery\jquery.js** — 10716 linhas, 116 funções/classes
+---
+- **C:\industria\connectit_django\venv\Lib\site-packages\django\contrib\admin\static\admin\js\vendor\jquery\jquery.js** — 10716 linhas, 116 funções/classes
+---
+- **C:\industria\connectit_django\venv\Lib\site-packages\numpy\_core\tests\test_multiarray.py** — 10563 linhas, 947 funções/classes
+---
+- **C:\industria\.venv\Lib\site-packages\numpy\_core\tests\test_multiarray.py** — 10548 linhas, 944 funções/classes
+---
+- **C:\industria\connectit_django\.venv\Lib\site-packages\numpy\_core\tests\test_multiarray.py** — 10548 linhas, 944 funções/classes
+---
+- **C:\industria\.venv\Lib\site-packages\numpy\ma\core.py** — 8936 linhas, 377 funções/classes
+---
+- **C:\industria\connectit_django\.venv\Lib\site-packages\numpy\ma\core.py** — 8936 linhas, 377 funções/classes
+---
+- **C:\industria\connectit_django\venv\Lib\site-packages\numpy\ma\core.py** — 8936 linhas, 377 funções/classes
+---
+- **C:\industria\.venv\Lib\site-packages\idna\uts46data.py** — 8681 linhas, 82 funções/classes
+---
+- **C:\industria\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py** — 8681 linhas, 82 funções/classes
+---
+- **C:\industria\connectit_django\.venv\Lib\site-packages\idna\uts46data.py** — 8681 linhas, 82 funções/classes
+---
+- **C:\industria\connectit_django\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py** — 8681 linhas, 82 funções/classes
+---
+- **C:\industria\connectit_django\venv\Lib\site-packages\idna\uts46data.py** — 8681 linhas, 82 funções/classes

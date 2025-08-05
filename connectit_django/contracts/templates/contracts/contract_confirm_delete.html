@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Confirmar Exclusão - ConnectIT{% endblock %}
+{% block content %}
+    <h1>Confirmar Exclusão</h1>
+    <p>Tem a certeza que deseja excluir o contrato: <strong>{{ contract }}</strong>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sim, excluir</button>
+        <a href="{% url 'contracts:contract_list' %}">Cancelar</a>
+    </form>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Lista de Contratos - ConnectIT{% endblock %}
+
+{% block content %}
+    <div class="header">
+        <h1>Contratos</h1>
+        <div class="actions">
+            <a href="{% url 'contracts:contract_add' %}">Adicionar Novo Contrato</a>
+        </div>
+    </div>
+
+    <div class="filter-form">
+        <form method="get" action="{% url 'contracts:contract_list' %}">
+            <input type="text" name="search" placeholder="Pesquisar..." value="{{ search_query }}">
+            
+            <select name="type">
+                <option value="">Todos os Tipos</option>
+                {% for type in all_types %}
+                    <option value="{{ type.id }}" {% if current_type == type.id|stringformat:"s" %}selected{% endif %}>
+                        {{ type.name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <select name="status">
+                <option value="">Todos os Status</option>
+                {% for value, display in status_choices %}
+                    <option value="{{ value }}" {% if current_status == value %}selected{% endif %}>
+                        {{ display }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Filtrar</button>
+        </form>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Número</th>
+                <th>Fornecedor</th>
+                <th>Tipo</th>
+                <th>Valor Mensal</th>
+                <th>Vigência</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contract in contracts %}
+            <tr>
+                <td>{{ contract.contract_number|default:"N/A" }}</td>
+                <td>{{ contract.supplier.name }}</td>
+                <td>{{ contract.contract_type.name }}</td>
+                <td>R$ {{ contract.monthly_value }}</td>
+                <td>{{ contract.start_date|date:"d/m/Y" }} a {{ contract.end_date|date:"d/m/Y" }}</td>
+                <td>{{ contract.get_status_display }}</td>
+                <td>
+                    <a href="{% url 'contracts:contract_detail' contract.pk %}">Detalhes</a> |
+                    <a href="{% url 'contracts:contract_edit' contract.pk %}">Editar</a> |
+                    <a href="{% url 'contracts:contract_delete' contract.pk %}">Excluir</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 20px;">Nenhum contrato encontrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1&amp;type={{ current_type }}&amp;status={{ current_status }}&amp;search={{ search_query }}">&laquo; primeira</a>
+            <a href="?page={{ page_obj.previous_page_number }}&amp;type={{ current_type }}&amp;status={{ current_status }}&amp;search={{ search_query }}">anterior</a>
+        {% endif %}
+
+        <span>
+            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&amp;type={{ current_type }}&amp;status={{ current_status }}&amp;search={{ search_query }}">próxima</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}&amp;type={{ current_type }}&amp;status={{ current_status }}&amp;search={{ search_query }}">última &raquo;</a>
+        {% endif %}
+    </div>
+{% endblock %}

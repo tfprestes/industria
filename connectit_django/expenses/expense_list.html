@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Lista de Despesas{% endblock %}
+
+{% block content %}
+    <h1>Despesas</h1>
+    <ul>
+        {% for expense in expenses %}
+            <li>{{ expense }}</li>
+        {% empty %}
+            <li>Nenhuma despesa registrada.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
