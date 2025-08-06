@@ -1,18 +1,19 @@
 # ==============================================================================
-# core/models.py - Refatorado e Corrigido como Arquiteto de Software Sênior
+# core/models.py - v3 (Versão Final Pós-Refatoração)
+# O modelo duplicado 'InventoryItem' foi removido.
 # ==============================================================================
 """
 Módulo de modelos para a aplicação 'core' do ConnectIT.
-Contém as definições de modelos principais e adiciona modelos ausentes
-para suportar as funcionalidades do dashboard.
+Contém as definições de modelos principais e de suporte ao ecossistema.
 """
 
+import os
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.translation import gettext_lazy as _ # Para TextChoices e legibilidade
+from django.utils.translation import gettext_lazy as _
 
-# Adicionamos um campo 'firestore_id' para mapear os dados antigos durante a importação.
-# Este campo pode ser removido após a migração estar concluída e validada.
+# O campo 'firestore_id' mapeia dados antigos durante a importação.
+# É uma solução pragmática e temporária. Planejar remoção após migração.
 
 class AssetType(models.Model):
     firestore_id = models.CharField(max_length=50, unique=True, null=True, blank=True, db_index=True)
@@ -85,15 +86,19 @@ class Sector(models.Model):
 
 
 class Asset(models.Model):
+    """
+    Representa o ativo principal do sistema (computadores, celulares, etc.).
+    É a entidade central que agrega a maioria das informações.
+    """
     firestore_id = models.CharField(max_length=50, unique=True, null=True, blank=True, db_index=True)
     
     class StatusChoices(models.TextChoices):
-        WAITING = 'waiting', 'Aguardando'
-        COMPLETED = 'completed', 'Concluído'
-        IN_USE = 'em_uso', 'Em Uso'
-        IN_STOCK = 'em_estoque', 'Em Estoque'
-        IN_MAINTENANCE = 'em_manutencao', 'Em Manutenção'
-        DISCARDED = 'descartado', 'Descartado'
+        WAITING = 'waiting', _('Aguardando')
+        COMPLETED = 'completed', _('Concluído')
+        IN_USE = 'em_uso', _('Em Uso')
+        IN_STOCK = 'em_estoque', _('Em Estoque')
+        IN_MAINTENANCE = 'em_manutencao', _('Em Manutenção')
+        DISCARDED = 'descartado', _('Descartado')
 
     # --- Identificação e Classificação ---
     asset_type = models.ForeignKey(AssetType, on_delete=models.PROTECT, verbose_name="Tipo de Ativo")
@@ -108,7 +113,7 @@ class Asset(models.Model):
     assigned_unit = models.ForeignKey(Unit, on_delete=models.PROTECT, verbose_name="Unidade Designada")
     assigned_sector = models.ForeignKey(Sector, on_delete=models.PROTECT, verbose_name="Setor Designado")
     assigned_cost_center = models.ForeignKey(CostCenter, on_delete=models.PROTECT, verbose_name="Centro de Custo")
-    user = models.CharField(max_length=100, blank=True, null=True, verbose_name="Usuário")
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_assets', verbose_name="Usuário Designado")
     responsible = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='responsible_for_assets', verbose_name="Responsável Técnico")
     shared_with = models.ManyToManyField(User, blank=True, related_name='shared_assets', verbose_name="Compartilhado Com")
 
@@ -116,7 +121,6 @@ class Asset(models.Model):
     supplier = models.ForeignKey(Supplier, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Fornecedor")
     invoice_number = models.CharField(max_length=50, blank=True, null=True, verbose_name="Número da Nota Fiscal")
     lease_value = models.DecimalField(max_digits=10, decimal_places=2, default=0.0, verbose_name="Valor de Locação/Compra")
-    # CORREÇÃO: Adicionado campo 'cost' para ser usado nos cálculos do dashboard
     cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.0, verbose_name="Custo Total do Ativo")
     contract_duration_months = models.IntegerField(blank=True, null=True, verbose_name="Duração do Contrato (meses)")
 
@@ -132,7 +136,7 @@ class Asset(models.Model):
     # --- Especificações Técnicas ---
     operating_system = models.CharField(max_length=100, blank=True, null=True, verbose_name="Sistema Operacional")
     processor = models.CharField(max_length=100, blank=True, null=True, verbose_name="Processador")
-    memory = models.CharField(max_length=50, blank=True, null=True, verbose_name="Memória RAM")
+    memory_gb = models.IntegerField(blank=True, null=True, verbose_name="Memória (GB)")
     office_version = models.CharField(max_length=50, blank=True, null=True, verbose_name="Versão do Office")
     ip_address = models.GenericIPAddressField(protocol='both', blank=True, null=True, verbose_name="Endereço IP")
     
@@ -164,36 +168,11 @@ class Attachment(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name="Data de Upload")
 
     def __str__(self):
-        return f"Anexo para {self.asset.name} - {self.file.name}"
+        return f"Anexo para '{self.asset}' - {os.path.basename(self.file.name)}"
 
     class Meta:
         verbose_name = "Anexo"
         verbose_name_plural = "Anexos"
-
-
-# ==============================================================================
-# NOVOS MODELOS ADICIONADOS PARA RESOLVER ERROS DE IMPORTAÇÃO E DASHBOARD
-# ==============================================================================
-
-class InventoryItem(models.Model):
-    """
-    Representa um item no inventário (não necessariamente um Ativo principal,
-    mas algo que pode ser rastreado, ex: licenças, componentes, suprimentos).
-    """
-    firestore_id = models.CharField(max_length=50, unique=True, null=True, blank=True, db_index=True)
-    name = models.CharField(max_length=200, verbose_name="Nome do Item")
-    quantity = models.IntegerField(default=0, verbose_name="Quantidade")
-    unit = models.CharField(max_length=50, blank=True, null=True, verbose_name="Unidade de Medida")
-    location = models.CharField(max_length=100, blank=True, null=True, verbose_name="Localização")
-    status = models.CharField(max_length=50, default='disponivel', verbose_name="Status do Item") # Ex: 'disponivel', 'em_uso', 'baixo_estoque'
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = "Item de Inventário"
-        verbose_name_plural = "Itens de Inventário"
-        ordering = ['name']
 
 
 class SoftwareCategory(models.Model):
@@ -215,16 +194,13 @@ class SoftwareCategory(models.Model):
 
 class Software(models.Model):
     """
-    Representa um software ou licença de software.
+    Representa um software ou licença de software que pode ser associado a um ou mais ativos.
     """
     firestore_id = models.CharField(max_length=50, unique=True, null=True, blank=True, db_index=True)
     name = models.CharField(max_length=200, verbose_name="Nome do Software")
     version = models.CharField(max_length=50, blank=True, null=True, verbose_name="Versão")
     category = models.ForeignKey(SoftwareCategory, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Categoria")
     license_key = models.CharField(max_length=255, unique=True, null=True, blank=True, verbose_name="Chave de Licença")
-    # Relacionamento com Ativo: um software pode estar instalado em múltiplos ativos
-    # Ou um ativo pode ter múltiplos softwares. ManyToMany é adequado.
-    # Usando 'related_name' para evitar conflito com 'shared_assets' em Asset.
     asset = models.ManyToManyField(Asset, blank=True, related_name='installed_software', verbose_name="Ativos Instalados Em")
     purchase_date = models.DateField(blank=True, null=True, verbose_name="Data de Compra")
     expiration_date = models.DateField(blank=True, null=True, verbose_name="Data de Expiração")
@@ -241,11 +217,11 @@ class Software(models.Model):
 
 class FinancialRecord(models.Model):
     """
-    Representa um registro financeiro (receita ou despesa).
+    Representa um registro financeiro genérico (receita ou despesa) para o dashboard.
     """
     class RecordTypeChoices(models.TextChoices):
-        REVENUE = 'receita', 'Receita'
-        EXPENSE = 'despesa', 'Despesa'
+        REVENUE = 'receita', _('Receita')
+        EXPENSE = 'despesa', _('Despesa')
         
     firestore_id = models.CharField(max_length=50, unique=True, null=True, blank=True, db_index=True)
     date = models.DateField(verbose_name="Data do Registro")

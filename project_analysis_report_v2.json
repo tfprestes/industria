@@ -1,0 +1,107 @@
+{
+    "project_root": "C:\\industria",
+    "django_project_dir": "C:\\industria\\connectit_django\\connectit_config",
+    "django_apps": {
+        "contracts": {
+            "path": "C:\\industria\\connectit_django\\contracts",
+            "files_of_interest": {
+                "admin.py": {
+                    "path": "C:\\industria\\connectit_django\\contracts\\admin.py",
+                    "loc": 26
+                },
+                "models.py": {
+                    "path": "C:\\industria\\connectit_django\\contracts\\models.py",
+                    "loc": 112
+                },
+                "tests.py": {
+                    "path": "C:\\industria\\connectit_django\\contracts\\tests.py",
+                    "loc": 2
+                },
+                "urls.py": {
+                    "path": "C:\\industria\\connectit_django\\contracts\\urls.py",
+                    "loc": 17
+                },
+                "views.py": {
+                    "path": "C:\\industria\\connectit_django\\contracts\\views.py",
+                    "loc": 71
+                }
+            },
+            "total_loc": 371
+        },
+        "core": {
+            "path": "C:\\industria\\connectit_django\\core",
+            "files_of_interest": {
+                "admin.py": {
+                    "path": "C:\\industria\\connectit_django\\core\\admin.py",
+                    "loc": 34
+                },
+                "models.py": {
+                    "path": "C:\\industria\\connectit_django\\core\\models.py",
+                    "loc": 206
+                },
+                "tests.py": {
+                    "path": "C:\\industria\\connectit_django\\core\\tests.py",
+                    "loc": 2
+                },
+                "urls.py": {
+                    "path": "C:\\industria\\connectit_django\\core\\urls.py",
+                    "loc": 12
+                },
+                "views.py": {
+                    "path": "C:\\industria\\connectit_django\\core\\views.py",
+                    "loc": 133
+                }
+            },
+            "total_loc": 1432
+        },
+        "expenses": {
+            "path": "C:\\industria\\connectit_django\\expenses",
+            "files_of_interest": {
+                "admin.py": {
+                    "path": "C:\\industria\\connectit_django\\expenses\\admin.py",
+                    "loc": 13
+                },
+                "models.py": {
+                    "path": "C:\\industria\\connectit_django\\expenses\\models.py",
+                    "loc": 34
+                },
+                "tests.py": {
+                    "path": "C:\\industria\\connectit_django\\expenses\\tests.py",
+                    "loc": 2
+                },
+                "urls.py": {
+                    "path": "C:\\industria\\connectit_django\\expenses\\urls.py",
+                    "loc": 8
+                },
+                "views.py": {
+                    "path": "C:\\industria\\connectit_django\\expenses\\views.py",
+                    "loc": 9
+                }
+            },
+            "total_loc": 112
+        },
+        "inventory": {
+            "path": "C:\\industria\\connectit_django\\inventory",
+            "files_of_interest": {
+                "admin.py": {
+                    "path": "C:\\industria\\connectit_django\\inventory\\admin.py",
+                    "loc": 13
+                },
+                "models.py": {
+                    "path": "C:\\industria\\connectit_django\\inventory\\models.py",
+                    "loc": 30
+                },
+                "tests.py": {
+                    "path": "C:\\industria\\connectit_django\\inventory\\tests.py",
+                    "loc": 2
+                },
+                "views.py": {
+                    "path": "C:\\industria\\connectit_django\\inventory\\views.py",
+                    "loc": 2
+                }
+            },
+            "total_loc": 94
+        }
+    },
+    "potential_issues": []
+}

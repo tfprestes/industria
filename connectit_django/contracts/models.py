@@ -1,14 +1,15 @@
 # ==============================================================================
-# contracts/models.py - Refatorado e Corrigido como Arquiteto de Software Sênior
+# contracts/models.py - v2 (Corrigido e Refatorado pelo Arquiteto de Software)
 # ==============================================================================
 """
 Módulo de modelos para a aplicação 'contracts' do ConnectIT.
 Contém as definições de modelos para tipos de contrato, contratos e pagamentos agendados.
+A lógica de negócio para geração de parcelas foi movida para contracts/services.py.
 """
 
 from django.db import models
 from dateutil.relativedelta import relativedelta
-from core.models import Asset, Supplier  # Assegura que Asset e Supplier são importados de core.models
+from core.models import Asset, Supplier
 
 class ContractType(models.Model):
     firestore_id = models.CharField(max_length=50, unique=True, null=True, blank=True, db_index=True)
@@ -45,11 +46,9 @@ class Contract(models.Model):
         default=StatusChoices.ACTIVE,
         verbose_name="Status",
     )
-
     start_date = models.DateField(verbose_name="Data de Início", null=True, blank=True)
     duration_months = models.PositiveIntegerField(verbose_name="Duração (meses)", null=True, blank=True)
     end_date = models.DateField(verbose_name="Data de Fim", blank=True, null=True)
-
     monthly_value = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Valor Mensal")
     payment_day = models.PositiveIntegerField(
         verbose_name="Dia do Pagamento no Mês", help_text="Dia do mês em que a fatura vence (1-31)"
@@ -63,35 +62,15 @@ class Contract(models.Model):
         return f"Contrato {self.contract_number or self.id} - {self.supplier.name}"
 
     def save(self, *args, **kwargs):
-        # Lógica robusta para calcular a data de fim
+        # A única lógica que permanece no save é o cálculo da data de fim,
+        # pois é uma propriedade intrínseca do próprio contrato.
         if self.start_date and self.duration_months:
             self.end_date = self.start_date + relativedelta(months=self.duration_months)
         else:
             self.end_date = None
-
-        is_new = self._state.adding
+        
+        # A lógica de criação de pagamentos foi REMOVIDA daqui.
         super().save(*args, **kwargs)
-
-        # Lógica para gerar as parcelas
-        if is_new and self.start_date and self.duration_months:
-            # Limpa parcelas antigas se existirem
-            self.payments.all().delete()
-            for i in range(self.duration_months):
-                due_date = self.start_date + relativedelta(months=i)
-                # Define o dia correto de vencimento dentro do mês
-                try:
-                    due_date = due_date.replace(day=self.payment_day)
-                except ValueError:
-                    # Ajusta para o último dia do mês se o dia não existir
-                    last_day_of_month = (due_date.replace(day=28) + relativedelta(days=4)).replace(day=1) - relativedelta(days=1)
-                    due_date = last_day_of_month
-
-                ScheduledPayment.objects.create(
-                    contract=self,
-                    due_date=due_date,
-                    value=self.monthly_value,
-                    description=f"Parcela {i + 1} de {self.duration_months} - Contrato {self.contract_number or self.id}"
-                )
 
     class Meta:
         verbose_name = "Contrato"
@@ -119,7 +98,6 @@ class ScheduledPayment(models.Model):
         verbose_name="Status"
     )
     payment_date = models.DateField(blank=True, null=True, verbose_name="Data de Pagamento Efetivo")
-    # Campo 'description' adicionado para resolver AttributeError no dashboard
     description = models.CharField(max_length=255, blank=True, null=True, verbose_name="Descrição da Parcela")
 
     def __str__(self):

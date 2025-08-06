@@ -1,7 +1,10 @@
-# Em: expenses/models.py
+# ==============================================================================
+# expenses/models.py - Código Validado pelo Arquiteto de Software
+# Nenhuma correção necessária. O modelo está arquiteturalmente sólido.
+# ==============================================================================
 
 from django.db import models
-from core.models import Asset  # Importamos o modelo Asset da nossa outra app
+from core.models import Asset
 
 class ExpenseType(models.Model):
     """

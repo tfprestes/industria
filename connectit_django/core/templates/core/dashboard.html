@@ -1,5 +1,5 @@
 {# ============================================================================== #}
-{# core/dashboard.html - Refatorado como Arquiteto de Software Sênior            #}
+{# core/dashboard.html - v2 (Refatorado pelo Arquiteto de Software)             #}
 {# ============================================================================== #}
 {% extends "base.html" %}
 {% load static %}
@@ -14,17 +14,16 @@
 {% block content %}
     <h1 class="dashboard-title">Dashboard Geral</h1>
 
-    <!-- SEÇÃO 1: CARDS DE MÉTRICAS SUPERIORES -->
     <div class="metrics-grid">
-        {% include 'core/components/_metric_card.html' with icon_class='fas fa-desktop' title='Computadores' total_value=computadores.total new_value=computadores.em_uso unit='' %}
-        {% include 'core/components/_metric_card.html' with icon_class='fas fa-mobile-alt' title='Celulares' total_value=celulares.total new_value=celulares.em_uso unit='' %}
-        {% include 'core/components/_metric_card.html' with icon_class='fas fa-print' title='Impressoras' total_value=impressoras.total new_value=impressoras.em_uso unit='' %}
+        {# ARQUITETO: Corrigido os nomes das variáveis para bater com o contexto da View #}
+        {% include 'core/components/_metric_card.html' with icon_class='fas fa-desktop' title='Computadores' total_value=pcs_metrics.total new_value=pcs_metrics.em_uso unit='' %}
+        {% include 'core/components/_metric_card.html' with icon_class='fas fa-mobile-alt' title='Celulares' total_value=cellphones_metrics.total new_value=cellphones_metrics.em_uso unit='' %}
+        {% include 'core/components/_metric_card.html' with icon_class='fas fa-print' title='Impressoras' total_value=printers_metrics.total new_value=printers_metrics.em_uso unit='' %}
         {% include 'core/components/_metric_card.html' with icon_class='fas fa-hdd' title='Desktops' total_value=desktops.total new_value=desktops.em_uso unit='' %}
-        {% include 'core/components/_metric_card.html' with icon_class='fas fa-boxes' title='Itens Inventário' total_value=inventory_items.total new_value=inventory_items.em_estoque unit='' %}
+        {% include 'core/components/_metric_card.html' with icon_class='fas fa-boxes' title='Itens Inventário' total_value=inventory_metrics.total new_value=inventory_metrics.em_estoque unit='' %}
         {% include 'core/components/_metric_card.html' with icon_class='fas fa-file-contract' title='Contratos & Veículos' total_value=contracts_vehicles.total new_value=contracts_vehicles.ativos unit='' %}
     </div>
 
-    <!-- SEÇÃO 2: GRÁFICOS DE BARRAS HORIZONTAIS -->
     <div class="charts-row">
         {% include 'core/components/_bar_chart_horizontal.html' with chart_id='costsByComputerSectorChart' title='Custo por Setor (Computadores)' chart_data=costs_by_computer_sector_chart_data %}
         {% include 'core/components/_bar_chart_horizontal.html' with chart_id='costsByCellphoneSectorChart' title='Custo por Setor (Celulares)' chart_data=costs_by_cellphone_sector_chart_data %}
@@ -34,7 +33,6 @@
         {% include 'core/components/_stacked_bar_chart.html' with chart_id='softwareDistributionChart' title='Distribuição de Software por Setor' chart_data=software_distribution_by_sector_chart_data %}
     </div>
 
-    <!-- SEÇÃO 3: LISTAS E TABELAS -->
     <div class="charts-row">
         <div class="dashboard-panel panel-half">
             <h3>Alertas Importantes</h3>
@@ -54,8 +52,8 @@
                 {% for payment in payments_due_soon %}
                     <li>
                         <span class="payment-description">{{ payment.description }}</span>
-                        <span class="payment-amount">R$ {{ payment.amount|floatformat:2 }}</span>
-                        <span class="payment-date">({{ payment.due_date }})</span>
+                        <span class="payment-amount">R$ {{ payment.value|floatformat:2 }}</span> {# Corrigido para payment.value #}
+                        <span class="payment-date">({{ payment.due_date|date:"d/m/Y" }})</span> {# Adicionado filtro de data #}
                     </li>
                 {% empty %}
                     <li class="no-data">Nenhum pagamento a vencer em breve.</li>
@@ -77,151 +75,11 @@
         {% include 'core/components/_line_chart.html' with chart_id='costEvolutionChart' title='Evolução de Custos' chart_data=cost_evolution_chart_data %}
     </div>
 
-    <!-- SCRIPTS PARA INICIALIZAÇÃO DOS GRÁFICOS -->
+{% endblock %}
+
+{% block extra_scripts %}
+    {# ARQUITETO: Lógica JS movida para um arquivo estático para melhor organização #}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-    <script>
-        Chart.register(ChartjsPluginDatalabels);
-        document.addEventListener('DOMContentLoaded', function() {
-            function initializeHorizontalBarChart(chartId, chartDataId, labelText, backgroundColor) {
-                const ctx = document.getElementById(chartId);
-                const dataScript = document.getElementById(chartDataId);
-                if (!ctx || !dataScript) return;
-                const chartData = JSON.parse(dataScript.textContent);
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: chartData.labels,
-                        datasets: [{
-                            label: labelText,
-                            data: chartData.data,
-                            backgroundColor: backgroundColor || chartData.backgroundColor,
-                            borderColor: backgroundColor || chartData.backgroundColor,
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        indexAxis: 'y',
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            datalabels: {
-                                anchor: 'end',
-                                align: 'start',
-                                formatter: v => `R$ ${v.toFixed(2)}`,
-                                color: '#fff',
-                                font: { weight: 'bold' }
-                            }
-                        },
-                        scales: {
-                            x: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#bbb' } },
-                            y: { grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#bbb' } }
-                        }
-                    }
-                });
-            }
-            function initializeStackedBarChart(chartId, chartDataId) {
-                const ctx = document.getElementById(chartId);
-                const dataScript = document.getElementById(chartDataId);
-                if (!ctx || !dataScript) return;
-                const chartData = JSON.parse(dataScript.textContent);
-                const datasets = chartData.datasets.map(ds => ({
-                    label: ds.label,
-                    data: ds.data,
-                    backgroundColor: ds.backgroundColor || 'rgba(54, 162, 235, 0.8)',
-                    borderColor: 'rgba(255, 255, 255, 0.1)',
-                    borderWidth: 1
-                }));
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: { labels: chartData.labels, datasets },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        indexAxis: 'y',
-                        plugins: { legend: { labels: { color: '#bbb' } }, datalabels: { display: false } },
-                        scales: {
-                            x: { stacked: true, beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#bbb' } },
-                            y: { stacked: true, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#bbb' } }
-                        }
-                    }
-                });
-            }
-            function initializeLineChart(chartId, chartDataId, labelText, color, tension = 0.4) {
-                const ctx = document.getElementById(chartId);
-                const dataScript = document.getElementById(chartDataId);
-                if (!ctx || !dataScript) return;
-                const chartData = JSON.parse(dataScript.textContent);
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: chartData.labels,
-                        datasets: [{
-                            label: labelText,
-                            data: chartData.data,
-                            borderColor: color || chartData.borderColor,
-                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                            tension,
-                            fill: true,
-                            pointBackgroundColor: color || chartData.borderColor,
-                            pointBorderColor: '#fff',
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: color || chartData.borderColor
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false }, datalabels: { display: false } },
-                        scales: {
-                            x: { grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#bbb' } },
-                            y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#bbb' } }
-                        }
-                    }
-                });
-            }
-            function initializeDoughnutChart(chartId, chartDataId, labelText) {
-                const ctx = document.getElementById(chartId);
-                const dataScript = document.getElementById(chartDataId);
-                if (!ctx || !dataScript) return;
-                const chartData = JSON.parse(dataScript.textContent);
-                new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: chartData.labels,
-                        datasets: [{
-                            label: labelText,
-                            data: chartData.data,
-                            backgroundColor: chartData.backgroundColor || ['#3498db','#e74c3c','#2ecc71','#f39c12','#9b59b6'],
-                            hoverOffset: 4
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { position: 'right', labels: { color: '#bbb' } },
-                            datalabels: {
-                                color: '#fff',
-                                formatter: (value, context) => {
-                                    const total = context.chart.data.datasets[0].data.reduce((sum, cur) => sum + cur, 0);
-                                    const pct = (value / total * 100).toFixed(1) + '%';
-                                    return context.chart.data.labels[context.dataIndex] + '\\n' + pct;
-                                },
-                                font: { weight: 'bold' }
-                            }
-                        }
-                    }
-                });
-            }
-
-            // Ajuste os parâmetros abaixo conforme os IDs de <canvas> e de scripts JSON nos templates incluídos
-            initializeHorizontalBarChart('costsByComputerSectorChart', 'costsByComputerSectorChart', 'Custo (R$)', 'rgba(66, 135, 245, 0.8)');
-            initializeHorizontalBarChart('costsByCellphoneSectorChart', 'costsByCellphoneSectorChart', 'Custo (R$)', 'rgba(40, 167, 69, 0.8)');
-            initializeHorizontalBarChart('costsByPrinterSectorChart', 'costsByPrinterSectorChart', 'Custo (R$)', 'rgba(255, 193, 7, 0.8)');
-            initializeStackedBarChart('softwareDistributionChart', 'softwareDistributionChart');
-            initializeLineChart('costEvolutionChart', 'costEvolutionChart', 'Custo Total (R$)', '#f39c12');
-        });
-    </script>
+    <script src="{% static 'js/dashboard_charts.js' %}"></script>
 {% endblock %}

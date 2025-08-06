@@ -1,9 +1,19 @@
-# Em: contracts/views.py
+# ==============================================================================
+# contracts/views.py - v2 (Refatorado com ModelForms e Camada de Serviço)
+# ==============================================================================
+"""
+Módulo de views para a aplicação 'contracts'.
+Utiliza ModelForms para os formulários e invoca a camada de serviço
+para executar lógicas de negócio complexas após salvar um contrato.
+"""
 
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+
 from .models import Contract, ContractType
+from .forms import ContractForm  # Importa o novo ModelForm
+from .services import generate_payments_for_contract # Importa o nosso serviço!
 
 class ContractListView(ListView):
     model = Contract
@@ -42,13 +52,19 @@ class ContractListView(ListView):
 
 class ContractCreateView(CreateView):
     model = Contract
+    form_class = ContractForm # Usa o ModelForm que criamos
     template_name = 'contracts/contract_form.html'
-    fields = [
-        'contract_type', 'supplier', 'contract_number', 'contract_object',
-        'status', 'start_date', 'duration_months', 'monthly_value',
-        'payment_day', 'linked_assets', 'observations'
-    ]
     success_url = reverse_lazy('contracts:contract_list')
+
+    def form_valid(self, form):
+        """
+        ARQUITETO: PONTO CRÍTICO DA REATORAÇÃO.
+        Sobrescreve o método form_valid para chamar nosso serviço
+        APÓS o contrato ser salvo com sucesso.
+        """
+        response = super().form_valid(form) # Primeiro, salva o contrato e obtém o objeto
+        generate_payments_for_contract(self.object) # Agora, chama o serviço com o contrato recém-criado
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -57,13 +73,18 @@ class ContractCreateView(CreateView):
 
 class ContractUpdateView(UpdateView):
     model = Contract
+    form_class = ContractForm # Usa o ModelForm que criamos
     template_name = 'contracts/contract_form.html'
-    fields = [
-        'contract_type', 'supplier', 'contract_number', 'contract_object',
-        'status', 'start_date', 'duration_months', 'monthly_value',
-        'payment_day', 'linked_assets', 'observations'
-    ]
     success_url = reverse_lazy('contracts:contract_list')
+    
+    def form_valid(self, form):
+        """
+        ARQUITETO: Também aplicamos a lógica aqui para re-gerar as parcelas
+        caso um contrato seja atualizado (ex: mudança na duração ou valor).
+        """
+        response = super().form_valid(form)
+        generate_payments_for_contract(self.object)
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
